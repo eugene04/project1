@@ -1,0 +1,10 @@
+{% extends "layout.html" %} 
+
+{% block content %}
+Good day 
+<p></p>thank you for visiting readbooknow.</p>
+<p>to gain full access to our website and allow you to contribute to our community by reviewing books please 
+    <a href="{{url_for('register')}}">register here</a></p>
+<p>already have an account?<a href="{{url_for('login')}}">login</a></p>
+{% endblock content %}
+
