@@ -46,7 +46,10 @@ def register():
         return redirect (url_for('books'))
     return render_template("register.html")
     
-    
+@app.route("/search")
+def search():
+    books=db.execute("SELECT * FROM books").fetchall()
+    return render_template("search.html",books=books)
     
 
 
@@ -54,6 +57,7 @@ def register():
 def books():
     books=db.execute("SELECT * FROM books").fetchall() 
     return render_template('books.html',books=books)
+
              
         
 if __name__=='__main__':

@@ -1,12 +1,12 @@
 {% extends "layout.html" %} 
 
 {% block content %}
-<div class="boxed"> 
+
 {% for book in books %}
-
+<div class="boxed">
 <option value="{{ book.id }}">the book's isbn {{book.isbn}}</option>
-<option value="{{ book.id }}">{{book.title}} by {{book.author}} year {{book.year}}</option>
-
-{% endfor %}
+<option value="{{ book.id }}" >{{book.title}} by {{book.author}} year {{book.year}}</option>
 </div>
+{% endfor %}
+
 {% endblock content %}
