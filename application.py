@@ -20,7 +20,9 @@ db = scoped_session(sessionmaker(bind=engine))
 
 @app.route("/")
 def index():
-    return render_template("index.html")
+    books=db.execute("SELECT * FROM books").fetchall() 
+    return render_template('index.html',books=books)
+    
 
 
 @app.route("/login", methods=['GET','POST'])
@@ -29,7 +31,8 @@ def login():
         email=request.form.get("email")
         password=request.form.get("password")
         if db.execute("SELECT * FROM users WHERE email= :email AND password= :password",{'email':email,'password':password}).rowcount==0:
-            return render_template('error.html',message="please check your email address and password and try again")
+            flash('check your email address and password and try again','danger')
+            
         else:
             flash(f'{email} you are now logged in','success')
             return redirect (url_for('books'))
