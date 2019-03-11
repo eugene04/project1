@@ -49,16 +49,21 @@ def register():
         return redirect (url_for('books'))
     return render_template("register.html")
     
-@app.route("/search")
+@app.route("/search",methods=['GET','POST'])
 def search():
-    books=db.execute("SELECT * FROM books").fetchall()
-    return render_template("search.html",books=books)
+    if request.method == "POST":
+        author=request.form.get('author')
+        book=db.execute("SELECT * FROM books WHERE author=:author",{'author':author}).fetchall()
+        return redirect (url_for('details'))
+    return render_template("search.html")
+    
+
     
 
 
 @app.route("/books",methods=['GET','POST'])
 def books():
-    books=db.execute("SELECT * FROM books").fetchall() 
+    books=db.execute("SELECT * FROM books ").fetchall() 
     return render_template('books.html',books=books)
 
              

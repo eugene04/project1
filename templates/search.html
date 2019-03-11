@@ -1,23 +1,14 @@
 {% extends "layout.html" %} 
 {% block content %}
-<label for=id_select>choose search method</label>
-<select for=id_select>
-   
-  <option value="isbn" >ISBN</option>
-  <option value="title">title</option>
-  <option value="author">author</option>
-  <option value="year">year</option>
-</select>
-<div>
-    
-<input name="books" list="mybooks">
-<datalist id="mybooks">
-        {% for book in books %}
-<option value="{{book.title}}">the book's isbn {{book.isbn}}<b>title</b>
-    {{book.title}} <b>by</b> {{book.author}} <b>year </b>{{book.year}}
-</option>
-</datalist>
-{% endfor %}
+
+<form action="url_for('search')" method="post">
+  {%for book in books%}
+  <input type="text" name="books" placeholder="author">
+    {% endfor %}
+  
+  
+
+</form>
 
 
 {% endblock content %}
