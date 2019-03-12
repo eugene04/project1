@@ -1,14 +1,27 @@
 {% extends "layout.html" %} 
 {% block content %}
 
-<form action="url_for('search')" method="post">
-  {%for book in books%}
-  <input type="text" name="books" placeholder="author">
-  <input type="submit" name="submit" value="search">
+<h1>Search A Book</h1>
 
-    {% endfor %}
-  
-  
+<form action="{{ url_for('mybooks') }}" method="post">
+
+    <div class="form-group">
+        <label for="SearchType">Search By:</label>
+        <select class="form-control" name="searchtype" id="SearchType">
+                <option value="isbn">ISBN</option>
+                <option value="title">Title</option>
+                <option value="author">Author</option>
+                <option value="year">Year</option>
+        </select>
+    </div>
+
+    <div class="form-group">
+        <input class="form-control" name="query" placeholder="Search">
+    </div>
+
+    <div class="form-group">
+        <button class="btn btn-primary" type="submit">Search</button>
+    </div>
 
 </form>
 

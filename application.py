@@ -52,19 +52,45 @@ def register():
 @app.route("/search",methods=['GET','POST'])
 def search():
     if request.method == "POST":
-        author=request.form.get('author')
-        book=db.execute("SELECT * FROM books WHERE author=:author",{'author':author}).fetchall()
-        return redirect (url_for('details'))
-    return render_template("search.html")
-    
+        searchtype=request.form.get('searchtype')
+        query=request.form.get('query')
+        if searchtype==Author:
+            books = db.execute("SELECT * FROM books WHERE author = :query", {"query": query}).fetchall()
+        elif searchtype==ISBN:
+            books = db.execute("SELECT * FROM books WHERE isbn = :query", {"query": query}).fetchall()
+        elif searchtype==Title:
+            books = db.execute("SELECT * FROM books WHERE title = :query", {"query": query}).fetchall()
+        else :
+            books = db.execute("SELECT * FROM books WHERE Year = :query", {"query": query}).fetchall()
+        
+    return render_template('search.html')
 
-    
+@app.route("/details",methods=['GET','POST'])
+def details():
+   
+    return render_template('details.html')  
 
 
 @app.route("/books",methods=['GET','POST'])
 def books():
     books=db.execute("SELECT * FROM books ").fetchall() 
-    return render_template('books.html',books=books)
+    return render_template('mybooks.html',books=books)
+
+@app.route("/mybooks",methods=['GET','POST'])
+def mybooks():
+    if request.method == "POST":
+        searchtype=request.form.get('searchtype')
+        query=request.form.get('query')
+        if searchtype==request.form.get('Author'):
+            books = db.execute("SELECT * FROM books WHERE author = :query", {"query": query}).fetchall()
+        elif searchtype==ISBN:
+            books = db.execute("SELECT * FROM books WHERE isbn = :query", {"query": query}).fetchall()
+        elif searchtype==Title:
+            books = db.execute("SELECT * FROM books WHERE title = :query", {"query": query}).fetchall()
+        else :
+            books = db.execute("SELECT * FROM books WHERE Year = :query", {"query":  query}).fetchall()
+    return render_template('mybooks.html',books=books)
+    
 
              
         

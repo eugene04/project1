@@ -1,7 +1,13 @@
 {% extends "layout.html" %} 
 {% block content %}
-ISBN:{{ book.isbn }}
-Title:{{book.title}}
-Author:{{book.author}}
-Year:{{book.year}}
+
+h1>Book Details:</h1>
+    <p>
+    ISBN: {{ book.isbn }}<br>
+    Title: {{ book.title }}<br>
+    Author: {{ book.author }}<br>
+    Year: {{ book.year }}<br>
+    </p>
+
+
 {% endblock content %}
