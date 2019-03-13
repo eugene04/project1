@@ -1,4 +1,5 @@
 import os
+import requests
 
 from flask import Flask, session, render_template, request, flash , redirect,url_for
 from flask_session import Session
@@ -20,8 +21,7 @@ db = scoped_session(sessionmaker(bind=engine))
 
 @app.route("/")
 def index():
-    books=db.execute("SELECT * FROM books").fetchall() 
-    return render_template('index.html',books=books)
+    return render_template('index.html')
     
 
 
@@ -51,19 +51,8 @@ def register():
     
 @app.route("/search",methods=['GET','POST'])
 def search():
-    if request.method == "POST":
-        searchtype=request.form.get('searchtype')
-        query=request.form.get('query')
-        if searchtype==Author:
-            books = db.execute("SELECT * FROM books WHERE author = :query", {"query": query}).fetchall()
-        elif searchtype==ISBN:
-            books = db.execute("SELECT * FROM books WHERE isbn = :query", {"query": query}).fetchall()
-        elif searchtype==Title:
-            books = db.execute("SELECT * FROM books WHERE title = :query", {"query": query}).fetchall()
-        else :
-            books = db.execute("SELECT * FROM books WHERE Year = :query", {"query": query}).fetchall()
-        
-    return render_template('search.html')
+    books=db.execute("SELECT * FROM books ").fetchall() 
+    return render_template('search.html', books=books)
 
 @app.route("/details",methods=['GET','POST'])
 def details():
@@ -81,15 +70,21 @@ def mybooks():
     if request.method == "POST":
         searchtype=request.form.get('searchtype')
         query=request.form.get('query')
-        if searchtype==request.form.get('Author'):
+        if searchtype=='author':
             books = db.execute("SELECT * FROM books WHERE author = :query", {"query": query}).fetchall()
-        elif searchtype==ISBN:
+        elif searchtype=='isbn':
             books = db.execute("SELECT * FROM books WHERE isbn = :query", {"query": query}).fetchall()
-        elif searchtype==Title:
+        elif searchtype=='title':
             books = db.execute("SELECT * FROM books WHERE title = :query", {"query": query}).fetchall()
         else :
-            books = db.execute("SELECT * FROM books WHERE Year = :query", {"query":  query}).fetchall()
-    return render_template('mybooks.html',books=books)
+            books = db.execute("SELECT * FROM books WHERE year = :query", {"query": query}).fetchall()
+    
+    res=requests.get("https://goodreads.com/book/review_counts.json",params={"key":"k3SrIbt8oJkVU4V0E34dA", "isbns":books.isbn}).json()["books"][0]
+    data=res.json()
+    ratings_count=data["ratings_count"]
+    avarage_rating=data["avarage_rating"]
+    return render_template('mybooks.html',books=books,ratings_count=ratings_count,avarage_rating=avarage_rating)
+    
     
 
              

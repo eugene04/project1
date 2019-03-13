@@ -1,7 +1,7 @@
 body {
   background: #fafafa;
   color: #333333;
-  margin-top: 5rem;
+  margin: 5rem;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -110,3 +110,9 @@ td, th {
 
 tr:nth-child(even) {
   background-color: #dddddd;
+
+  .sticky {
+    position: sticky;
+    position: -webkit-sticky;
+    top: 0;
+  }
