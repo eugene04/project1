@@ -1,12 +1,12 @@
 {% extends "layout.html" %} 
 {% block content %}
-% for book in books %}
+
 <h1>Book Details:</h1>
 <p>
-ISBN: {{ book.isbn }}<br>
-Title: {{ book.title }}<br>
-Author: {{ book.author }}<br>
-Year: {{ book.year }}<br>
+ISBN: {{ books.isbn }}<br>
+Title: {{ books.title }}<br>
+Author: {{ books.author }}<br>
+Year: {{ books.year }}<br>
 </p> 
 <hr>
 <h2>Goodreads ratings</h2>

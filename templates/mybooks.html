@@ -4,20 +4,12 @@
 <h1>my books:</h1>
 
 <p>
-        <form action="{{ url_for('details') }}" name=ISBN method="post">
-ISBN: {{ book.isbn }}<br>
-</form>
+        
+<a href="{{url_for('details',book_id=book.id)}}">{{ book.isbn }}</a><br>
 Title: {{ book.title }}<br>
 Author: {{ book.author }}<br>
 Year: {{ book.year }}<br>
 </p> 
-
-
-
-    
-
-
-    
     {% endfor %}
 
 {% endblock content %}
