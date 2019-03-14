@@ -1,16 +1,22 @@
 {% extends "layout.html" %} 
 {% block content %}
-
-h1>Book Details:</h1>
-    <p>
-    ISBN: {{ book.isbn }}<br>
-    Title: {{ book.title }}<br>
-    Author: {{ book.author }}<br>
-    Year: {{ book.year }}<br>
+% for book in books %}
+<h1>Book Details:</h1>
+<p>
+ISBN: {{ book.isbn }}<br>
+Title: {{ book.title }}<br>
+Author: {{ book.author }}<br>
+Year: {{ book.year }}<br>
+</p> 
+<hr>
+<h2>Goodreads ratings</h2>
+<p>
+    Total Number of Ratings : {{ work_ratings_count }} <br>
+    Average Rating : {{ average_rating }}<br>
+    ISBN : {{ isbn }}
     </p>
-    <hr>
-    <h2>Good reads ratings</h2>
 
+    
 
 
 {% endblock content %}

@@ -56,8 +56,17 @@ def search():
 
 @app.route("/details",methods=['GET','POST'])
 def details():
-   
-    return render_template('details.html')  
+    if request.method == "POST":
+        ISBN=request.form.get('ISBN')
+        books=db.execute("SELECT * FROM books WHERE isbn=:isbn",{'isbn':ISBN}).fetchall()
+    ISBN=request.form.get('ISBN')
+    res=requests.get("https://www.goodreads.com/book/review_counts.json",params={"key":"k3SrIbt8oJkVU4V0E34dA","isbns":ISBN}).json()["books"][0]
+    work_ratings_count = res["work_ratings_count"]
+    average_rating = res["average_rating"]
+    isbn = res["isbn"]
+    return render_template('details.html', books=books , work_ratings_count=work_ratings_count ,average_rating=average_rating , isbn=isbn)
+    
+     
 
 
 @app.route("/books",methods=['GET','POST'])
@@ -79,11 +88,7 @@ def mybooks():
         else :
             books = db.execute("SELECT * FROM books WHERE year = :query", {"query": query}).fetchall()
     
-    res=requests.get("https://goodreads.com/book/review_counts.json",params={"key":"k3SrIbt8oJkVU4V0E34dA", "isbns":books.isbn}).json()["books"][0]
-    data=res.json()
-    ratings_count=data["ratings_count"]
-    avarage_rating=data["avarage_rating"]
-    return render_template('mybooks.html',books=books,ratings_count=ratings_count,avarage_rating=avarage_rating)
+    return render_template('mybooks.html', books=books )
     
     
 
