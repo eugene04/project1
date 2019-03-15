@@ -116,3 +116,6 @@ tr:nth-child(even) {
     position: -webkit-sticky;
     top: 0;
   }
+  .goodreads{
+    color:red;
+  }
