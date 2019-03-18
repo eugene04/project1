@@ -1,0 +1,18 @@
+{% extends "layout.html" %} 
+{% block content %}
+<h1>Book Details:</h1>
+<p>
+ISBN: {{ books.isbn }}<br>
+Title: {{ books.title }}<br>
+Author: {{ books.author }}<br>
+Year: {{ books.year }}<br>
+</p> 
+<div class="goodreads">
+<h2>Goodreads ratings</h2>
+<p>
+    Total Number of Ratings : {{ work_ratings_count }} <br>
+    Average Rating : {{ average_rating }}<br>
+    ISBN : {{ isbn }}
+    </p>
+    </div>
+{% endblock content %}

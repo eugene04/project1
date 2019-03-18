@@ -17,14 +17,16 @@ Year: {{ books.year }}<br>
     </div>
     <hr>
     <h3>my reviews</h3>
-    <form>
-        <div class="form-group>
+        <fieldset>
+        <fieldset>
+            <form action="{{ url_for('myreviews',book_id=books.id)}}",name="rating",method="post">
+        <div class="form-group">
                 <label for="rating">Rating ( Out of 5 )</label>
             <input input name="rating" type="radio" value="1">1
-            <input input name="rating" type="radio" value="1">2
-            <input input name="rating" type="radio" value="1">3
-            <input input name="rating" type="radio" value="1">4
-            <input input name="rating" type="radio" value="1">5
+            <input input name="rating" type="radio" value="2">2
+            <input input name="rating" type="radio" value="3">3
+            <input input name="rating" type="radio" value="4">4
+            <input input name="rating" type="radio" value="5">5
         </div>
         <div class="form-group" >
         <label for="comment">Comment:</label>
