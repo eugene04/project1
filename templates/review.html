@@ -19,7 +19,7 @@ Year: {{ books.year }}<br>
     <h3>my reviews</h3>
         <fieldset>
         <fieldset>
-            <form action="{{ url_for('myreviews',book_id=books.id)}}",name="rating",method="post">
+            <form action="{{ url_for('myreviews',book_id=books.id)}}",name="rating",method="POST">
         <div class="form-group">
                 <label for="rating">Rating ( Out of 5 )</label>
             <input input name="rating" type="radio" value="1">1

@@ -5,7 +5,6 @@ from flask import Flask, session, render_template, request, flash , redirect,url
 from flask_session import Session
 from sqlalchemy import create_engine
 from sqlalchemy.orm import scoped_session, sessionmaker
-from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
 
@@ -22,8 +21,7 @@ db = scoped_session(sessionmaker(bind=engine))
 
 @app.route("/")
 def index():
-    books=db.execute("SELECT * FROM books ").fetchall()
-    return render_template('index.html', books=books)
+    return render_template('index.html')
     
 
 
@@ -32,8 +30,7 @@ def login():
     if request.method == "POST":
         email=request.form.get("email")
         password=request.form.get("password")
-        hash_password=generate_password_hash(password)
-        if db.execute("SELECT * FROM users WHERE email= :email AND password= :password",{'email':email,'password':hash_password}).rowcount==0:
+        if db.execute("SELECT * FROM users WHERE email= :email AND password= :password",{'email':email,'password':password}).rowcount==0:
             flash('check your email address and password and try again','danger')
             
         else:
@@ -52,10 +49,10 @@ def register():
         return redirect (url_for('books'))
     return render_template("register.html")
     
-@app.route("/books",methods=['GET','POST'])
-def books():
+@app.route("/search",methods=['GET','POST'])
+def search():
     books=db.execute("SELECT * FROM books ").fetchall() 
-    return render_template('books.html', books=books)
+    return render_template('search.html', books=books)
 
 @app.route("/details/<int:book_id>", methods=["GET", "POST"])
 def details(book_id):
@@ -66,6 +63,14 @@ def details(book_id):
     average_rating = res["average_rating"]
     isbn = res["isbn"]
     return render_template('details.html', books=books , work_ratings_count=work_ratings_count ,average_rating=average_rating , isbn=isbn)
+
+     
+
+
+@app.route("/books",methods=['GET','POST'])
+def books():
+    books=db.execute("SELECT * FROM books ").fetchall() 
+    return render_template('mybooks.html',books=books)
 
 @app.route("/mybooks",methods=['GET','POST'])
 def mybooks():
@@ -83,33 +88,9 @@ def mybooks():
     
     return render_template('mybooks.html', books=books )
 
-@app.route("/review/<int:book_id>",methods=['GET','POST'])
-def review(book_id):
-    books=db.execute("SELECT * FROM books WHERE id=:book_id",{'book_id':book_id}).fetchone()
-    
-    res=requests.get("https://www.goodreads.com/book/review_counts.json",params={"key":"k3SrIbt8oJkVU4V0E34dA","isbns":books.isbn}).json()["books"][0]
-    work_ratings_count = res["work_ratings_count"]
-    average_rating = res["average_rating"]
-    isbn = res["isbn"]
-    return render_template('review.html', books=books , work_ratings_count=work_ratings_count ,average_rating=average_rating , isbn=isbn)
-
-@app.route("/myreviews<int:book_id>",methods=['GET','POST'])
-def myreviews(book_id):
-    books=db.execute("SELECT * FROM books WHERE id=:book_id",{'book_id':book_id}).fetchone()
-    res=requests.get("https://www.goodreads.com/book/review_counts.json",params={"key":"k3SrIbt8oJkVU4V0E34dA","isbns":books.isbn}).json()["books"][0]
-    work_ratings_count = res["work_ratings_count"]
-    average_rating = res["average_rating"]
-    isbn = res["isbn"]
-    return render_template('myreviews.html', books=books , work_ratings_count=work_ratings_count ,average_rating=average_rating , isbn=isbn)
-    
-     
-    
-   
-    
-
-
-
-
+@app.route("/myreviews",methods=['GET','POST'])
+def myreviews():
+    return render_template('myreviews.html')
     
     
 
