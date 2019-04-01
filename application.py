@@ -1,6 +1,6 @@
 import os
 import requests
-
+from werkzeug.security import generate_password_hash, check_password_hash
 from flask import Flask, session, render_template, request, flash , redirect,url_for
 from flask_session import Session
 from sqlalchemy import create_engine
@@ -31,28 +31,30 @@ def login():
     if request.method == "POST":
         email=request.form.get("email")
         password=request.form.get("password")
-        hash_password=generate_password_hash(password)
-        if db.execute("SELECT * FROM users WHERE email= :email AND password= :password",{'email':email,'password':hash_password}).rowcount==0:
-            flash('check your email address and password and try again','danger')
-            
+        user = db.execute("SELECT id, password FROM users WHERE email= :email", {"email": email}).fetchone()
+        if db.execute("SELECT * FROM users WHERE email=:email",{'email':email}).rowcount==0 or check_password_hash(user.password, password)==False: 
+            flash('check your email address and password and try again','danger')    
         else:
             flash(f'{email} you are now logged in','success')
             return redirect (url_for('books'))
     return render_template("login.html")
+        
 
 @app.route("/register", methods=['GET','POST'])
 def register(): 
     if request.method == "POST":
         email=request.form.get("email")
         password=request.form.get("password")
-        db.execute("INSERT INTO users (email,password) VALUES(:email, :password)",{"email":email,           "password":password})
+        hash_password=generate_password_hash(password) 
+        db.execute("INSERT INTO users (email,password) VALUES(:email, :password)",{"email":email,           "password":hash_password})
         db.commit()
-        flash(f'congratulations {email} you have successfully registered for our site and are now logged in','success')
-        return redirect (url_for('books'))
+        flash(f'congratulations {email} you have successfully registered for our site please logged in','success')
+        return redirect (url_for('login'))
     return render_template("register.html")
     
 @app.route("/books",methods=['GET','POST'])
 def books():
+    
     books=db.execute("SELECT * FROM books ").fetchall() 
     return render_template('books.html', books=books)
 
